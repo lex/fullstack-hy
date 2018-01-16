@@ -16,32 +16,36 @@ const Statistics = ({ statistics }) => {
   }
 
   return (
-    <div>
-      <Statistic name="good" value={statistics.good} />
-      <Statistic name="neutral" value={statistics.neutral} />
-      <Statistic name="bad" value={statistics.bad} />
-      <Statistic
-        name="mean"
-        value={Math.max(
-          (statistics.good - statistics.bad) / statistics.total,
-          0
-        )}
-      />
-      <Statistic
-        name="positive"
-        value={statistics.good / statistics.total * 100}
-        suffix=" %"
-      />
-    </div>
+    <table style={{ width: "100%", tableLayout: "fixed" }}>
+      <tbody>
+        <Statistic name="good" value={statistics.good} />
+        <Statistic name="neutral" value={statistics.neutral} />
+        <Statistic name="bad" value={statistics.bad} />
+        <Statistic
+          name="mean"
+          value={Math.max(
+            (statistics.good - statistics.bad) / statistics.total,
+            0
+          )}
+        />
+        <Statistic
+          name="positive"
+          value={statistics.good / statistics.total * 100}
+          suffix=" %"
+        />
+      </tbody>
+    </table>
   );
 };
 
 const Statistic = ({ name, value, suffix }) => {
   return (
-    <p>
-      {name}: {value}
-      {suffix}
-    </p>
+    <tr>
+      <td>{name}</td>
+      <td>
+        {value} {suffix}
+      </td>
+    </tr>
   );
 };
 
