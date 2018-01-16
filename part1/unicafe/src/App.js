@@ -11,6 +11,10 @@ const Button = ({ handleClick, name }) => {
 };
 
 const Statistics = ({ statistics }) => {
+  if (statistics.total == 0) {
+    return <p>no feedback given yet</p>;
+  }
+
   return (
     <div>
       <Statistic name="good" value={statistics.good} />
