@@ -16,6 +16,11 @@ const Statistics = ({ statistics }) => {
       <p>good: {statistics.good}</p>
       <p>neutral: {statistics.neutral}</p>
       <p>bad: {statistics.bad}</p>
+      <p>
+        mean:{" "}
+        {Math.max((statistics.good - statistics.bad) / statistics.total, 0)}
+      </p>
+      <p>positive: {statistics.good / statistics.total * 100} %</p>
     </div>
   );
 };
@@ -27,7 +32,8 @@ class App extends Component {
       statistics: {
         good: 0,
         neutral: 0,
-        bad: 0
+        bad: 0,
+        total: 0
       }
     };
   }
@@ -35,6 +41,7 @@ class App extends Component {
   addFeedback = name => {
     let statistics = this.state.statistics;
     statistics[name] = statistics[name] + 1;
+    statistics.total = statistics.total + 1;
     this.setState({ statistics: statistics });
   };
 
