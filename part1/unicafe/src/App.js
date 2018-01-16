@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
-import "./App.css";
 
 const Title = ({ text }) => {
   return <h2>{text}</h2>;
@@ -11,7 +9,7 @@ const Button = ({ handleClick, name }) => {
 };
 
 const Statistics = ({ statistics }) => {
-  if (statistics.total == 0) {
+  if (statistics.total === 0) {
     return <p>no feedback given yet</p>;
   }
 
