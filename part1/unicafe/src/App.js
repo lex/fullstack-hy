@@ -13,15 +13,31 @@ const Button = ({ handleClick, name }) => {
 const Statistics = ({ statistics }) => {
   return (
     <div>
-      <p>good: {statistics.good}</p>
-      <p>neutral: {statistics.neutral}</p>
-      <p>bad: {statistics.bad}</p>
-      <p>
-        mean:{" "}
-        {Math.max((statistics.good - statistics.bad) / statistics.total, 0)}
-      </p>
-      <p>positive: {statistics.good / statistics.total * 100} %</p>
+      <Statistic name="good" value={statistics.good} />
+      <Statistic name="neutral" value={statistics.neutral} />
+      <Statistic name="bad" value={statistics.bad} />
+      <Statistic
+        name="mean"
+        value={Math.max(
+          (statistics.good - statistics.bad) / statistics.total,
+          0
+        )}
+      />
+      <Statistic
+        name="positive"
+        value={statistics.good / statistics.total * 100}
+        suffix=" %"
+      />
     </div>
+  );
+};
+
+const Statistic = ({ name, value, suffix }) => {
+  return (
+    <p>
+      {name}: {value}
+      {suffix}
+    </p>
   );
 };
 
