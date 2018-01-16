@@ -1,0 +1,40 @@
+user->browser:
+note left of browser
+  user writes something to the text box
+  and clicks save
+end note
+
+browser->server: POST fullstack-exampleapp.herokuapp.com/new_note
+note left of server
+  the note gets POSTed to the server
+  the server adds the note to the notes
+  with the current timestamp and redirects the
+  user back to /notes
+end note
+server->browser: status 302, Location: /notes
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/notes
+server->browser: status 200
+
+note left of server
+  the javascript and css are probably cached
+  so they wont be fetched again
+end note
+
+browser->user:
+note left of browser
+ browser renders the HTML
+end note
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/data.json
+note left of server
+  the javascript requests data.json again
+  it's going to contain the newly added note
+end note
+server->browser: status 200
+
+browser->user:
+note left of browser
+  the browser fills in the notes from the json
+  in an unordered list
+end note

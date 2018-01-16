@@ -1,0 +1,36 @@
+user->browser:
+
+note left of browser
+  user chooses to go to
+  https://fullstack-exampleapp.herokuapp.com/spa
+end note
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/spa
+server->browser: status 200
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/main.css
+server->browser: status 200
+
+browser->user:
+note left of browser
+ browser renders the HTML
+end note
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/spa.js
+note left of server
+  the browser requests the javascript code
+  and begins executing it
+end note
+server->browser: status 200
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/data.json
+note left of server
+  the javascript code requests data.json
+end note
+server->browser: status 200
+
+browser->user:
+note left of browser
+  the browser fills in the notes from the json
+  in an unordered list
+end note

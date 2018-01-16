@@ -1,0 +1,24 @@
+user->browser:
+note left of browser
+  user writes something to the text box
+  and clicks save
+end note
+
+note right of browser 
+  the form's submitting is overriden in the javascript
+  the note is added to the list of notes
+  and the notes get redrawn
+end note
+
+browser->user:
+note left of browser
+  the browser redraws the list of notes
+end note
+
+browser->server: POST fullstack-exampleapp.herokuapp.com/new_note_spa
+note left of server
+  the note gets sent to the backend in the background
+  the server saves the note for future requests
+end note
+server->browser: status 201
+

@@ -1,0 +1,40 @@
+user->browser:
+note left of browser
+  user clicks the notes link
+end note
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/notes
+note left of server
+  HTML gets constructed from the template
+end note
+server->browser: status 200, content in HTML
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/main.css
+note left of server
+  the browser requests the styling
+end note
+server->browser: status 200
+
+browser->user:
+note left of browser
+ browser renders the HTML
+end note
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/main.js
+note left of server
+  the browser requests the javascript code
+  and begins executing it
+end note
+server->browser: status 200
+
+browser->server: GET fullstack-exampleapp.herokuapp.com/data.json
+note left of server
+  the javascript code requests data.json
+end note
+server->browser: status 200
+
+browser->user:
+note left of browser
+  the browser fills in the notes from the json
+  in an unordered list
+end note
