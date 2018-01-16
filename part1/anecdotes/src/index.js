@@ -1,17 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const Anecdote = ({ text, votes }) => {
+const Anecdote = ({ anecdote }) => {
   return (
     <div>
-      <p>{text}</p>
-      <p>has {votes || "0"} votes</p>
+      <p>{anecdote.text}</p>
+      <p>has {anecdote.votes} votes</p>
     </div>
   );
-};
-
-const Button = ({ handleClick }) => {
-  return <button onClick={handleClick}>next anecdote</button>;
 };
 
 class App extends React.Component {
@@ -19,36 +15,48 @@ class App extends React.Component {
     super(props);
     this.state = {
       selected: 0,
-      votes: {}
+      mostVoted: undefined,
+      anecdotes: this.props.anecdotes.reduce((acc, cur) => {
+        acc.push({ text: cur, votes: 0 });
+        return acc;
+      }, [])
     };
   }
 
   voteAnecdote = () => {
     return () => {
-      let votes = this.state.votes;
-      let selected = this.state.selected;
-      votes[selected] = votes[selected] === undefined ? 1 : votes[selected] + 1;
-      this.setState({ votes: votes });
+      let anecdotes = this.state.anecdotes;
+      let anecdote = anecdotes[this.state.selected];
+      anecdote.votes += 1;
+
+      let mostVoted = anecdotes.reduce((previous, current) => {
+        return current.votes > previous.votes ? current : previous;
+      }, anecdotes[0]);
+
+      this.setState({ anecdotes: anecdotes, mostVoted: mostVoted });
     };
   };
 
   nextAnecdote = size => {
     return () => {
-      this.setState({ selected: Math.floor(Math.random() * size) });
+      this.setState({
+        selected: Math.floor(Math.random() * this.state.anecdotes.length)
+      });
     };
   };
 
   render() {
     return (
       <div>
-        <Anecdote
-          text={this.props.anecdotes[this.state.selected]}
-          votes={this.state.votes[this.state.selected]}
-        />
+        <Anecdote anecdote={this.state.anecdotes[this.state.selected]} />
         <button onClick={this.voteAnecdote()}>vote</button>
-        <button onClick={this.nextAnecdote(this.props.anecdotes.length)}>
-          next anecdote
-        </button>
+        <button onClick={this.nextAnecdote()}>next anecdote</button>
+        {this.state.mostVoted !== undefined && (
+          <div>
+            <h2>anecdote with most votes:</h2>
+            <Anecdote anecdote={this.state.mostVoted} />
+          </div>
+        )}
       </div>
     );
   }
