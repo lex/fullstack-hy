@@ -1,8 +1,44 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const Otsikko = props => {
+  return <h1>{props.kurssi}</h1>;
+};
+
+const Sisalto = props => {
+  return <Osa osa={props.osa} tehtavia={props.tehtavia} />;
+};
+
+const Osa = props => {
+  return (
+    <p>
+      {props.osa} {props.tehtavia}
+    </p>
+  );
+};
+
+const Yhteensa = props => {
+  return <p>yhteensä {props.yhteensa} tehtävää</p>;
+};
+
+const App = () => {
+  const kurssi = "Half Stack -sovelluskehitys";
+  const osa1 = "Reactin perusteet";
+  const tehtavia1 = 10;
+  const osa2 = "Tiedonvälitys propseilla";
+  const tehtavia2 = 7;
+  const osa3 = "Komponenttien tila";
+  const tehtavia3 = 14;
+
+  return (
+    <div>
+      <Otsikko kurssi={kurssi} />
+      <Sisalto osa={osa1} tehtavia={tehtavia1} />
+      <Sisalto osa={osa2} tehtavia={tehtavia2} />
+      <Sisalto osa={osa3} tehtavia={tehtavia3} />
+      <Yhteensa yhteensa={tehtavia1 + tehtavia2 + tehtavia3} />
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById("root"));
