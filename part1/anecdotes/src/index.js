@@ -1,8 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const Anecdote = ({ text }) => {
-  return <p>{text}</p>;
+const Anecdote = ({ text, votes }) => {
+  return (
+    <div>
+      <p>{text}</p>
+      <p>has {votes || "0"} votes</p>
+    </div>
+  );
 };
 
 const Button = ({ handleClick }) => {
@@ -13,9 +18,19 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: 0
+      selected: 0,
+      votes: {}
     };
   }
+
+  voteAnecdote = () => {
+    return () => {
+      let votes = this.state.votes;
+      let selected = this.state.selected;
+      votes[selected] = votes[selected] === undefined ? 1 : votes[selected] + 1;
+      this.setState({ votes: votes });
+    };
+  };
 
   nextAnecdote = size => {
     return () => {
@@ -26,7 +41,11 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Anecdote text={this.props.anecdotes[this.state.selected]} />
+        <Anecdote
+          text={this.props.anecdotes[this.state.selected]}
+          votes={this.state.votes[this.state.selected]}
+        />
+        <button onClick={this.voteAnecdote()}>vote</button>
         <button onClick={this.nextAnecdote(this.props.anecdotes.length)}>
           next anecdote
         </button>
