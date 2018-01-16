@@ -1,18 +1,52 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+const Title = ({ text }) => {
+  return <h2>{text}</h2>;
+};
+
+const Button = ({ handleClick, name }) => {
+  return <button onClick={() => handleClick(name)}>{name}</button>;
+};
+
+const Statistics = ({ statistics }) => {
+  return (
+    <div>
+      <p>good: {statistics.good}</p>
+      <p>neutral: {statistics.neutral}</p>
+      <p>bad: {statistics.bad}</p>
+    </div>
+  );
+};
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      statistics: {
+        good: 0,
+        neutral: 0,
+        bad: 0
+      }
+    };
+  }
+
+  addFeedback = name => {
+    let statistics = this.state.statistics;
+    statistics[name] = statistics[name] + 1;
+    this.setState({ statistics: statistics });
+  };
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Title text="leave feedback" />
+        <Button name="good" handleClick={this.addFeedback} />
+        <Button name="neutral" handleClick={this.addFeedback} />
+        <Button name="bad" handleClick={this.addFeedback} />
+        <Title text="statistics" />
+        <Statistics statistics={this.state.statistics} />
       </div>
     );
   }
