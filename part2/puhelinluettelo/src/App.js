@@ -1,5 +1,16 @@
 import React from "react";
 
+const Title = ({ text }) => {
+  return <h2>{text}</h2>;
+};
+
+const TextInput = ({ label, value, handleChange }) => {
+  return (
+    <div>
+      {label}: <input value={value} onChange={handleChange} />
+    </div>
+  );
+};
 const Person = ({ person }) => {
   return (
     <p>
@@ -55,33 +66,37 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h2>Puhelinluettelo</h2>
-        <div>
-          rajaa näytettäviä:{" "}
-          <input value={this.state.filter} onChange={this.handleFilterChange} />
-        </div>
-        <h2>Lisää uusi</h2>
+        <Title text="Puhelinluettelo" />
+
+        <TextInput
+          label="rajaa näytettäviä"
+          value={this.state.filter}
+          handleChange={this.handleFilterChange}
+        />
+
+        <Title text="Lisää uusi" />
+
         <form onSubmit={this.addName}>
-          <div>
-            nimi:{" "}
-            <input
-              value={this.state.newName}
-              onChange={this.handleNameChange}
-            />
-          </div>
-          <div>
-            numero:{" "}
-            <input
-              value={this.state.newNumber}
-              onChange={this.handleNumberChange}
-            />
-          </div>
+          <TextInput
+            label="nimi"
+            value={this.state.newName}
+            handleChange={this.handleNameChange}
+          />
+
+          <TextInput
+            label="numero"
+            value={this.state.newNumber}
+            handleChange={this.handleNumberChange}
+          />
+
           <div>
             <button type="submit">lisää</button>
             {this.state.duplicate && <p>nimi on jo listalla</p>}
           </div>
         </form>
-        <h2>Numerot</h2>
+
+        <Title text="Numerot" />
+
         {this.state.persons
           .filter(p =>
             p.name.toLowerCase().includes(this.state.filter.toLowerCase())
