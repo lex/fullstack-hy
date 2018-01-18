@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-const Country = ({ country }) => {
-  return <div>{country.name}</div>;
+const Country = ({ country, handleClick }) => {
+  return <div onClick={() => handleClick(country)}>{country.name}</div>;
 };
 
 const CountryDetails = ({ country }) => {
@@ -45,6 +45,11 @@ class App extends Component {
     this.setState({ filteredCountries });
   };
 
+  handleCountryClick = country => {
+    const filteredCountries = [country];
+    this.setState({ filteredCountries });
+  };
+
   render() {
     return (
       <div className="App">
@@ -58,7 +63,11 @@ class App extends Component {
               <CountryDetails country={this.state.filteredCountries[0]} />
             ) : (
               this.state.filteredCountries.map(c => (
-                <Country key={c.name} country={c} />
+                <Country
+                  key={c.name}
+                  country={c}
+                  handleClick={this.handleCountryClick}
+                />
               ))
             )
           ) : (
