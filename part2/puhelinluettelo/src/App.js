@@ -1,15 +1,20 @@
 import React from "react";
 
-const Person = props => {
-  return <p>{props.name}</p>;
+const Person = ({ person }) => {
+  return (
+    <p>
+      {person.name} {person.number}
+    </p>
+  );
 };
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      persons: [{ name: "Arto Hellas" }],
+      persons: [{ name: "Arto Hellas", number: "040-123456" }],
       newName: "",
+      newNumber: "",
       duplicate: false
     };
   }
@@ -17,6 +22,7 @@ class App extends React.Component {
   addName = event => {
     event.preventDefault();
     const name = this.state.newName;
+    const number = this.state.newNumber;
     let persons = this.state.persons;
 
     if (persons.filter(p => p.name === name).length > 0) {
@@ -24,12 +30,16 @@ class App extends React.Component {
       return;
     }
 
-    persons.push({ name: name });
-    this.setState({ persons, newName: "", duplicate: false });
+    persons.push({ name: name, number: number });
+    this.setState({ persons, newName: "", newNumber: "", duplicate: false });
   };
 
   handleNameChange = event => {
     this.setState({ newName: event.target.value });
+  };
+
+  handleNumberChange = event => {
+    this.setState({ newNumber: event.target.value });
   };
 
   render() {
@@ -45,13 +55,20 @@ class App extends React.Component {
             />
           </div>
           <div>
+            numero:{" "}
+            <input
+              value={this.state.newNumber}
+              onChange={this.handleNumberChange}
+            />
+          </div>
+          <div>
             <button type="submit">lisää</button>
             {this.state.duplicate && <p>nimi on jo listalla</p>}
           </div>
         </form>
         <h2>Numerot</h2>
         {this.state.persons.map(person => (
-          <Person key={person.name} name={person.name} />
+          <Person key={person.name} person={person} />
         ))}
       </div>
     );
