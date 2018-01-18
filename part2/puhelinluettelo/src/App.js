@@ -9,7 +9,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       persons: [{ name: "Arto Hellas" }],
-      newName: ""
+      newName: "",
+      duplicate: false
     };
   }
 
@@ -17,8 +18,14 @@ class App extends React.Component {
     event.preventDefault();
     const name = this.state.newName;
     let persons = this.state.persons;
+
+    if (persons.filter(p => p.name === name).length > 0) {
+      this.setState({ duplicate: true });
+      return;
+    }
+
     persons.push({ name: name });
-    this.setState({ persons, newName: "" });
+    this.setState({ persons, newName: "", duplicate: false });
   };
 
   handleNameChange = event => {
@@ -39,6 +46,7 @@ class App extends React.Component {
           </div>
           <div>
             <button type="submit">lisää</button>
+            {this.state.duplicate && <p>nimi on jo listalla</p>}
           </div>
         </form>
         <h2>Numerot</h2>
