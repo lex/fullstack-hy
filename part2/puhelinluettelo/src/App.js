@@ -49,8 +49,16 @@ class App extends React.Component {
       return;
     }
 
-    persons.push({ name: name, number: number });
-    this.setState({ persons, newName: "", newNumber: "", duplicate: false });
+    const person = { name: name, number: number };
+    const url = "http://localhost:3001/persons";
+    axios.post(url, person).then(response => {
+      this.setState({
+        persons: persons.concat(response.data),
+        newName: "",
+        newNumber: "",
+        duplicate: false
+      });
+    });
   };
 
   handleNameChange = event => {
