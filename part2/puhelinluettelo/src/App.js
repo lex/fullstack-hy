@@ -71,6 +71,9 @@ class App extends React.Component {
 
       personService
         .update(existingPerson.id, existingPerson)
+        .catch(error => {
+          return personService.create(existingPerson);
+        })
         .then(person =>
           this.setState({
             persons: persons
