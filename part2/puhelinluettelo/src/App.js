@@ -1,5 +1,6 @@
 import React from "react";
 import personService from "./services/persons.js";
+import "./App.css";
 
 const Title = ({ text }) => {
   return <h2>{text}</h2>;
@@ -24,6 +25,14 @@ const Person = ({ person, handleClick }) => {
   );
 };
 
+const Notification = ({ notification }) => {
+  return notification === undefined ? null : (
+    <div className={`notification-${notification.style}`}>
+      {notification.message}
+    </div>
+  );
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +40,9 @@ class App extends React.Component {
       persons: [],
       newName: "",
       newNumber: "",
-      filter: ""
+      filter: "",
+      notification: undefined,
+      notificationDelay: 3000
     };
   }
 
@@ -58,27 +69,51 @@ class App extends React.Component {
 
       existingPerson.number = number;
 
-      personService.update(existingPerson.id, existingPerson).then(person =>
-        this.setState({
-          persons: persons
-            .filter(p => p.id !== existingPerson.id)
-            .concat(person)
-        })
-      );
+      personService
+        .update(existingPerson.id, existingPerson)
+        .then(person =>
+          this.setState({
+            persons: persons
+              .filter(p => p.id !== existingPerson.id)
+              .concat(person)
+          })
+        )
+        .then(() => {
+          this.setState({
+            notification: {
+              message: `Muutettiin puhelinnumero henkilöltä ${
+                existingPerson.name
+              }`,
+              style: "success"
+            }
+          });
+          this.hideNotification();
+        });
 
       return;
     }
 
     const person = { name: name, number: number };
 
-    personService.create(person).then(person => {
-      this.setState({
-        persons: persons.concat(person),
-        newName: "",
-        newNumber: "",
-        duplicate: false
+    personService
+      .create(person)
+      .then(person => {
+        this.setState({
+          persons: persons.concat(person),
+          newName: "",
+          newNumber: "",
+          duplicate: false
+        });
+      })
+      .then(() => {
+        this.setState({
+          notification: {
+            message: `Lisättiin ${person.name}`,
+            style: "success"
+          }
+        });
+        this.hideNotification();
       });
-    });
   };
 
   handleNameChange = event => {
@@ -98,17 +133,36 @@ class App extends React.Component {
       return;
     }
 
-    personService.remove(person.id).then(r =>
-      this.setState({
-        persons: this.state.persons.filter(p => p.id !== person.id)
-      })
-    );
+    personService
+      .remove(person.id)
+      .then(r =>
+        this.setState({
+          persons: this.state.persons.filter(p => p.id !== person.id)
+        })
+      )
+      .then(() => {
+        this.setState({
+          notification: {
+            message: `Poistettiin ${person.name}`,
+            style: "success"
+          }
+        });
+        this.hideNotification();
+      });
   };
+
+  hideNotification() {
+    setTimeout(() => {
+      this.setState({ notification: undefined });
+    }, this.state.notificationDelay);
+  }
 
   render() {
     return (
       <div>
         <Title text="Puhelinluettelo" />
+
+        <Notification notification={this.state.notification} />
 
         <TextInput
           label="rajaa näytettäviä"
