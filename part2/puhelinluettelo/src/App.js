@@ -31,8 +31,7 @@ class App extends React.Component {
       persons: [],
       newName: "",
       newNumber: "",
-      filter: "",
-      duplicate: false
+      filter: ""
     };
   }
 
@@ -46,12 +45,32 @@ class App extends React.Component {
     const number = this.state.newNumber;
     let persons = this.state.persons;
 
-    if (persons.filter(p => p.name === name).length > 0) {
-      this.setState({ duplicate: true });
+    const existingPerson = persons.find(p => p.name === name);
+
+    if (existingPerson !== undefined) {
+      if (
+        !window.confirm(
+          `${name} on jo luettelossa, korvataanko vanha numero uudella?`
+        )
+      ) {
+        return;
+      }
+
+      existingPerson.number = number;
+
+      personService.update(existingPerson.id, existingPerson).then(person =>
+        this.setState({
+          persons: persons
+            .filter(p => p.id !== existingPerson.id)
+            .concat(person)
+        })
+      );
+
       return;
     }
 
     const person = { name: name, number: number };
+
     personService.create(person).then(person => {
       this.setState({
         persons: persons.concat(person),
@@ -114,7 +133,6 @@ class App extends React.Component {
 
           <div>
             <button type="submit">lisää</button>
-            {this.state.duplicate && <p>nimi on jo listalla</p>}
           </div>
         </form>
 
