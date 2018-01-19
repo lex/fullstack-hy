@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import personService from "./services/persons.js";
 
 const Title = ({ text }) => {
   return <h2>{text}</h2>;
@@ -34,8 +34,7 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    const url = "http://localhost:3001/persons";
-    axios.get(url).then(response => this.setState({ persons: response.data }));
+    personService.getAll().then(persons => this.setState({ persons }));
   }
 
   addName = event => {
@@ -50,10 +49,9 @@ class App extends React.Component {
     }
 
     const person = { name: name, number: number };
-    const url = "http://localhost:3001/persons";
-    axios.post(url, person).then(response => {
+    personService.create(person).then(person => {
       this.setState({
-        persons: persons.concat(response.data),
+        persons: persons.concat(person),
         newName: "",
         newNumber: "",
         duplicate: false
