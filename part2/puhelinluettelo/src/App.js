@@ -13,11 +13,14 @@ const TextInput = ({ label, value, handleChange }) => {
   );
 };
 
-const Person = ({ person }) => {
+const Person = ({ person, handleClick }) => {
   return (
-    <p>
-      {person.name} {person.number}
-    </p>
+    <div>
+      <p>
+        {person.name} {person.number}{" "}
+        <button onClick={() => handleClick(person)}>poista</button>
+      </p>
+    </div>
   );
 };
 
@@ -71,6 +74,18 @@ class App extends React.Component {
     this.setState({ filter: event.target.value });
   };
 
+  handleRemove = person => {
+    if (!window.confirm(`Poistetaanko ${person.name}?`)) {
+      return;
+    }
+
+    personService.remove(person.id).then(r =>
+      this.setState({
+        persons: this.state.persons.filter(p => p.id !== person.id)
+      })
+    );
+  };
+
   render() {
     return (
       <div>
@@ -109,7 +124,9 @@ class App extends React.Component {
           .filter(p =>
             p.name.toLowerCase().includes(this.state.filter.toLowerCase())
           )
-          .map(p => <Person key={p.name} person={p} />)}
+          .map(p => (
+            <Person key={p.name} person={p} handleClick={this.handleRemove} />
+          ))}
       </div>
     );
   }
