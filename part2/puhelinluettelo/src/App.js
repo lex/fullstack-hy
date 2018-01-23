@@ -16,12 +16,13 @@ const TextInput = ({ label, value, handleChange }) => {
 
 const Person = ({ person, handleClick }) => {
   return (
-    <div>
-      <p>
-        {person.name} {person.number}{" "}
+    <tr>
+      <td>{person.name}</td>
+      <td>{person.number}</td>
+      <td>
         <button onClick={() => handleClick(person)}>poista</button>
-      </p>
-    </div>
+      </td>
+    </tr>
   );
 };
 
@@ -195,13 +196,15 @@ class App extends React.Component {
 
         <Title text="Numerot" />
 
-        {this.state.persons
-          .filter(p =>
-            p.name.toLowerCase().includes(this.state.filter.toLowerCase())
-          )
-          .map(p => (
-            <Person key={p.name} person={p} handleClick={this.handleRemove} />
-          ))}
+        <table>
+          {this.state.persons
+            .filter(p =>
+              p.name.toLowerCase().includes(this.state.filter.toLowerCase())
+            )
+            .map(p => (
+              <Person key={p.name} person={p} handleClick={this.handleRemove} />
+            ))}
+        </table>
       </div>
     );
   }
